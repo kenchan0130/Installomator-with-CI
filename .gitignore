@@ -1,0 +1,12 @@
+.DS_Store
+build/
+SamplePkgs/
+scratch/
+*.pkg
+*.mpkg
+*.dmg
+*.zip
+*.app
+*.tbz
+
+
