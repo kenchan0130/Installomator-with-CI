@@ -15,7 +15,6 @@ jobs:
       - name: Run test
         run: |
           concurrency=$(sysctl -n hw.ncpu)
-          cat Labels.txt | parallel --joblog joblog.txt --halt now,fail=1 --jobs ${concurrency} --tagstring {}: ./Installomator.sh {}
-          cat joblog.txt
+          cat Labels.txt | parallel --halt now,fail=1 --jobs ${concurrency} --tagstring {}: ./Installomator.sh {}
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
