@@ -17,7 +17,7 @@ jobs:
       - id: set-matrix
         run: |
           labelsJSON=$( jq -R -s -c 'split("\n")' < Labels.txt | jq '{ include: [.[] | select(. != "") | { label: . }] } | @json' )
-          echo "::set-output name=matrix::${labelsJSON}"
+          echo "::set-output name=matrix::{\"include\":[{\"label\":\"1password7\"},{\"label\":\"atom\"},{\"label\":\"aviatrix\"},{\"label\":\"zoom\"}]}"
   build:
     needs: collect-labels
     runs-on: ubuntu-latest
