@@ -120,7 +120,8 @@ downloadURLFromGit() { # $1 git user name, $2 git repo name
     gitreponame=${2?:"no git repo name"}
 
     if [ -n "$archiveName" ]; then
-    curl --silent --fail "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest"
+    a=$(curl --silent --fail "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest")
+    echo "$a"
     downloadURL=$(curl --silent --fail "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest" \
     | awk -F '"' "/browser_download_url/ && /$archiveName/ { print \$4 }")
     else
