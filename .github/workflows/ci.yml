@@ -8,25 +8,40 @@ on:
   pull_request:
 
 jobs:
-  collect-labels:
-    runs-on: macos-latest
+  job1:
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v2
       - id: set-matrix
-        run: |
-          labelsJSON=$(jq -R -s -c 'split("\n")' < Labels.txt | jq '[.[] | select(. != "")] | @json')
-          echo "::set-output name=matrix::${labelsJSON}"
-
-  build:
-    needs: collect-labels
-    runs-on: macos-latest
+        run: echo "::set-output name=matrix::{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
     strategy:
-      matrix:
-        label: ["atom", "1password7"]
-        # label: ${{ fromJson(needs.collect-labels.outputs.matrix) }}
+      matrix: ${{fromJson(needs.job1.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          ./Installomator.sh "${{ matrix.label }}"
+      - run: echo "${{ matrix }}"
+# jobs:
+#   collect-labels:
+#     runs-on: macos-latest
+#     outputs:
+#       matrix: ${{ steps.set-matrix.outputs.matrix }}
+#     steps:
+#       - uses: actions/checkout@v2
+#       - id: set-matrix
+#         run: |
+#           labelsJSON=$(jq -R -s -c 'split("\n")' < Labels.txt | jq '[.[] | select(. != "")] | @json')
+#           echo "::set-output name=matrix::${labelsJSON}"
+
+#   build:
+#     needs: collect-labels
+#     runs-on: macos-latest
+#     strategy:
+#       matrix:
+#         # label: ["atom", "1password7"]
+#         label: ${{ fromJson(needs.collect-labels.outputs.matrix) }}
+#     steps:
+#       - uses: actions/checkout@v2
+#       - run: |
+#           ./Installomator.sh "${{ matrix.label }}"
