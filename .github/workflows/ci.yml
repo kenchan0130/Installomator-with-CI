@@ -12,6 +12,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
+      - name: Run test
+        run: |
           concurrency=$(sysctl -n hw.ncpu)
-          cat Labels.txt | xargs -L1 -P${concurrency} -I{} ./Installomator.sh {}
+          cat Labels.txt | xargs -L1 -P${concurrency} -I{} zsh -c "./Installomator.sh {} 2>&1 | while read -r line; do echo \"{}:\$line:\"; done"
