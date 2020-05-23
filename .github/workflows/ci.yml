@@ -10,13 +10,11 @@ on:
 jobs:
   build:
     runs-on: macos-latest
-    env:
-      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - run: brew install parallel
       - name: Run test
         run: |
-          echo "-H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'" > ~/.curlrc
           concurrency=$(sysctl -n hw.ncpu)
           cat Labels.txt | parallel --halt soon,fail=1 --jobs ${concurrency} ./Installomator.sh {}
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}

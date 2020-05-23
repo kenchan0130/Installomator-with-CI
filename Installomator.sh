@@ -120,12 +120,12 @@ downloadURLFromGit() { # $1 git user name, $2 git repo name
     gitreponame=${2?:"no git repo name"}
 
     if [ -n "$archiveName" ]; then
-    a=$(curl -fsSL "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest")
+    a=$(curl -fsS -H "authorization: Bearer ${GITHUB_API_TOKEN}" "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest")
     echo "$a"
-    downloadURL=$(curl --silent --fail "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest" \
+    downloadURL=$(curl -fsS -H "authorization: Bearer ${GITHUB_API_TOKEN}" "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest" \
     | awk -F '"' "/browser_download_url/ && /$archiveName/ { print \$4 }")
     else
-    downloadURL=$(curl --silent --fail "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest" \
+    downloadURL=$(curl -fsS "authorization: Bearer ${GITHUB_API_TOKEN}" "https://api.github.com/repos/$gitusername/$gitreponame/releases/latest" \
     | awk -F '"' "/browser_download_url/ && /$type/ { print \$4 }")
     fi
     if [ -z "$downloadURL" ]; then
