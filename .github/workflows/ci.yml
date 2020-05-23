@@ -24,7 +24,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        label: ["atom", "1password"]
+        label: ["atom", "1password7"]
         # label: ${{ fromJson(needs.collect-labels.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v2
